@@ -7,7 +7,7 @@ import connectDB from "./src/common/configs/connectdb.js";
 import setupSwagger from "./src/common/configs/swagger-config.js";
 
 const app = express();
-connectDB();
+connectDB(); // Kết nối đến MongoD
 // Middleware
 app.use(cors()); // <== cho phép mọi domain, hoặc cấu hình chi tiết hơn nếu cần
 app.use(express.json());
@@ -23,7 +23,7 @@ setupSwagger(app);
 // Routes
 app.use("/api", router);
 
-app.listen(PORT, HOST, () => {
+app.listen(PORT, () => {
   console.log(`Server running at http://${HOST}:${PORT}/`);
   console.log(`Swagger Docs available at http://${HOST}:${PORT}/api-docs`);
 });

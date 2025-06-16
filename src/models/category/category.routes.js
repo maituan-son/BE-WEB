@@ -19,7 +19,6 @@ categoryRoutes.get("/:id", getDetailCategory);
 categoryRoutes.delete("/:id", deleteCategory);
 categoryRoutes.delete("/soft-delete/:id", softDeleteCategory);
 categoryRoutes.patch("/restore/:id", restoreCategory);
-
 categoryRoutes.use(validBodyRequest(categorySchema));
 categoryRoutes.post("/", createCategory);
 categoryRoutes.patch("/:id", updateCategory);
