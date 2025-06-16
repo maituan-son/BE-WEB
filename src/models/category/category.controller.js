@@ -1,111 +1,99 @@
-import createError from "../../common/configs/utils/error.js";
-import handleAsync from "../../common/configs/utils/handleAsync.js";
-import createResponse from "../../common/configs/utils/response.js";
 import Category from "./category.model.js";
+import createError from "../../common/utils/error.js";
+import createResponse from "../../common/utils/response.js";
+import handleAsync from "../../common/utils/handleAsync.js";
+import MESSAGES from "../../common/contstants/messages.js";
 
-export const getAllCategories = handleAsync(async (req, res) => {
-  const categories = await Category.find({ deleteAt: null });
+export const createCategory = handleAsync(async (req, res, next) => {
+  const existing = await Category.findOne({ title: req.body.title });
+  if (existing)
+    return next(createError(400, MESSAGES.CATEGORY.CREATE_ERROR_EXISTS));
+  const data = await Category.create(req.body);
   return res.json(
-    createResponse(true, 200, "Categories fetched successfully", categories)
+    createResponse(true, 201, MESSAGES.CATEGORY.CREATE_SUCCESS, data)
   );
 });
-export const getCategoryById = handleAsync(async (req, res, next) => {
-  const { id } = req.params;
-  if (!id) {
-    return next(createError(400, "Category ID is required"));
-  }
 
-  const category = await Category.findById(id);
-  if (!category || category.deleteAt) {
-    return next(createError(404, "Category not found"));
+export const getListCategory = handleAsync(async (req, res, next) => {
+  const data = await Category.find();
+  if (!data || data.length === 0) {
+    return next(createError(404, MESSAGES.CATEGORY.NOT_FOUND));
   }
-
   return res.json(
-    createResponse(true, 200, "Category fetched successfully", category)
+    createResponse(true, 200, MESSAGES.CATEGORY.GET_SUCCESS, data)
   );
 });
-export const createCategory = handleAsync(async (req, res) => {
-  const { title, description, slug } = req.body;
-  if (!title) {
-    return res
-      .status(400)
-      .json(createResponse(false, 400, "title is required"));
+
+export const getDetailCategory = handleAsync(async (req, res, next) => {
+  const data = await Category.findById(req.params.id);
+  if (!data) {
+    next(createError(404, MESSAGES.CATEGORY.NOT_FOUND));
   }
-
-  const newCategory = new Category({ title, description, slug });
-  await newCategory.save();
-
   return res.json(
-    createResponse(true, 201, "Category created successfully", newCategory)
+    createResponse(true, 200, MESSAGES.CATEGORY.GET_SUCCESS, data)
   );
 });
+
 export const updateCategory = handleAsync(async (req, res, next) => {
-  const { id } = req.params;
-  if (!id) {
-    return next(createError(400, "Category ID is required"));
-  }
-
-  const { title, description, slug } = req.body;
-  const updatedCategory = await Category.findByIdAndUpdate(
-    id,
-    { title, description, slug },
-    { new: true }
-  );
-
-  if (!updatedCategory || updatedCategory.deleteAt) {
-    return next(createError(404, "Category not found"));
-  }
-
-  return res.json(
-    createResponse(true, 200, "Category updated successfully", updatedCategory)
-  );
+  const data = await Category.findByIdAndUpdate(req.params.id, req.body);
+  if (data)
+    return res.json(
+      createResponse(true, 200, MESSAGES.CATEGORY.UPDATE_SUCCESS, data)
+    );
+  next(createError(false, 404, "Category update failed!"));
 });
 
 export const deleteCategory = handleAsync(async (req, res, next) => {
   const { id } = req.params;
-  if (!id) {
-    return next(createError(400, "Category ID is required"));
+  if (id) {
+    const data = await Category.findByIdAndDelete(id);
+    if (data) {
+      return res.json(
+        createResponse(true, 200, MESSAGES.CATEGORY.DELETE_SUCCESS, data)
+      );
+    }
+    next(createError(false, 404, MESSAGES.CATEGORY.NOT_FOUND));
+  } else {
+    next(createError(false, 404, MESSAGES.CATEGORY.NOT_FOUND));
   }
-
-  const deletedCategory = await Category.findByIdAndDelete(id);
-  if (!deletedCategory || deletedCategory.deleteAt) {
-    return next(createError(404, "Category not found"));
-  }
-
-  return res.json(
-    createResponse(true, 200, "Category deleted successfully", deletedCategory)
-  );
 });
+
 export const softDeleteCategory = handleAsync(async (req, res, next) => {
   const { id } = req.params;
-  if (!id) {
-    await Category.findByIdAndUpdate(id, { deleteAt: new Date() });
-    return res.json(createResponse(true, 200, "hidden category successfully"));
+  if (id) {
+    const data = await Category.findOneAndUpdate(
+      { _id: id, deletedAt: null },
+      {
+        deletedAt: new Date(),
+      },
+      {
+        new: true,
+      }
+    );
+    return res.json(
+      createResponse(true, 200, MESSAGES.CATEGORY.SOFT_DELETE_SUCCESS, data)
+    );
   }
-  next(createError(400, "Category ID is required"));
+  next(createError(false, 404, MESSAGES.CATEGORY.SOFT_DELETE_FAILED));
 });
 
 export const restoreCategory = handleAsync(async (req, res, next) => {
   const { id } = req.params;
-  if (!id) {
-    return next(createError(400, "Category ID is required"));
-  }
+  console.log(id);
+  if (id) {
+    const data = await Category.findOneAndUpdate(
+      { _id: id },
+      {
+        deletedAt: null,
+      },
+      { new: true }
+    );
 
-  const restoredCategory = await Category.findByIdAndUpdate(
-    id,
-    { deleteAt: null },
-    { new: true }
-  );
-  if (!restoredCategory) {
-    return next(createError(404, "Category not found"));
+    console.log(data);
+    // ne = not equal
+    return res.json(
+      createResponse(true, 200, MESSAGES.CATEGORY.RESTORE_SUCCESS, data)
+    );
   }
-
-  return res.json(
-    createResponse(
-      true,
-      200,
-      "Category restored successfully",
-      restoredCategory
-    )
-  );
+  next(createError(false, 404, MESSAGES.CATEGORY.RESTORE_FAILED));
 });

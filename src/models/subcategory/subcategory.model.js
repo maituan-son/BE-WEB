@@ -1,10 +1,16 @@
 import mongoose from "mongoose";
-const categorySchema = new mongoose.Schema(
+
+const subCategorySchema = new mongoose.Schema(
   {
     title: {
       type: String,
       required: true,
       unique: true,
+    },
+    categoryParentId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Category",
+      required: true,
     },
     logoUrl: {
       type: String,
@@ -29,4 +35,5 @@ const categorySchema = new mongoose.Schema(
     timestamps: true, // Automatically manage createdAt and updatedAt fields
   }
 );
-export default mongoose.model("Category", categorySchema);
+
+export default mongoose.model("Subcategory", subCategorySchema);

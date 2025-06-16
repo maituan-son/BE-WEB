@@ -7,7 +7,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "swagger": "node --experimental-specifier-resolution=node src/common/configs/swagger-setup.js"
   },
   "keywords": [
     "nodejs",
@@ -26,9 +27,12 @@
     "express": "^5.1.0",
     "express-fileupload": "^1.5.1",
     "fileupload": "^1.0.0",
+    "fs": "^0.0.1-security",
     "mongoose": "^8.15.1",
     "multer": "^2.0.1",
     "multer-storage-cloudinary": "^4.0.0",
+    "swagger-autogen": "^2.23.7",
+    "swagger-ui-express": "^5.0.1",
     "zod": "^3.25.55"
   }
 }

@@ -1,15 +1,14 @@
-import z from "zod";
-import createError from "../configs/utils/error";
-
-const validateRequestBody = (schema) => {
-  return (req, res, next) => {
-    const result = schema.safeParse(req.body);
-    if (!result.success) {
-      const errors = result.error.errors.map((err) => err.message);
-      return next(createError(400, "Invalid request body", errors));
-    }
+const validBodyRequest = (schema) => (req, res, next) => {
+  try {
+    const data = schema.parse(req.body);
+    req.data = data;
     next();
-  };
+  } catch (err) {
+    const error = err.errors[0];
+    return res
+      .status(400)
+      .json({ "Valid body request": `${error.path}: ${error.message}` });
+  }
 };
 
-export default validateRequestBody;
+export default validBodyRequest;

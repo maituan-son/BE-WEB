@@ -1,9 +1,10 @@
 import express from "express";
 import cors from "cors"; // <== thêm dòng này
 import router from "./src/routers/index.js";
-import { HOST, POST } from "./src/common/configs/enviroments.js";
+import { HOST, PORT } from "./src/common/configs/enviroments.js";
 import fileUpload from "express-fileupload";
 import connectDB from "./src/common/configs/connectdb.js";
+import setupSwagger from "./src/common/configs/swagger-config.js";
 
 const app = express();
 connectDB();
@@ -17,9 +18,12 @@ app.use(
   })
 );
 
+// Setup Swagger
+setupSwagger(app);
 // Routes
 app.use("/api", router);
 
-app.listen(POST, HOST, () => {
-  console.log(`Server running at http://${HOST}:${POST}/`);
+app.listen(PORT, HOST, () => {
+  console.log(`Server running at http://${HOST}:${PORT}/`);
+  console.log(`Swagger Docs available at http://${HOST}:${PORT}/api-docs`);
 });

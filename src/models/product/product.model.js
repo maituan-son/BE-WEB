@@ -1,66 +1,35 @@
 import e from "express";
 import mongoose from "mongoose";
+import { productColors, shoeSizes } from "../enums.js";
 const productSchema = new mongoose.Schema(
   {
-    name: {
+    title: String,
+    thumbnail: String,
+    description: String,
+    shortDescription: String,
+    specifications: Object,
+    price: Number,
+    oldPrice: Number,
+    slug: String,
+    brand: { type: mongoose.Schema.Types.ObjectId, ref: "Brand" },
+    subCategory: { type: mongoose.Schema.Types.ObjectId, ref: "SubCategory" },
+    color: {
       type: String,
-      required: true,
+      enum: productColors,
     },
-    brand: {
-      type: [String],
-      enum: ["nike", "adidas", "puma", "reebok", "etc."],
-      required: true,
-    },
-    categoryId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "category",
-      required: true,
-    },
-    price: {
+    size: {
       type: Number,
-      required: true,
+      enum: shoeSizes,
     },
-    currency: {
-      type: String,
-      required: true,
-    },
-    sizes: {
-      type: [Number],
-      enum: [36, 37, 38, 39, 40, 41, 42, 43, 44, 45],
-      default: [],
-      required: true,
-    },
-    colors: {
-      type: [String],
-      enum: [
-        "red",
-        "blue",
-        "green",
-        "black",
-        "white",
-        "yellow",
-        "pink",
-        "purple",
-      ],
-      default: [],
-      required: true,
-    },
-    image: {
-      type: [String],
-      default: [],
-    },
-    inStock: {
-      type: Boolean,
-      default: false,
-    },
-    description: {
-      type: String,
-      required: true,
-    },
-    deleteAt: {
-      type: Date,
-      default: null, // Allows for soft deletion
-    },
+    stock: Number,
+    soldCount: Number,
+    seoTitle: String,
+    seoDescription: String,
+    tags: [String],
+    deletedAt: { type: Date, default: null },
+    updatedAt: { type: Date, default: Date.now },
+    deletedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    updatedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   },
   {
     versionKey: false, // Disable the __v field
