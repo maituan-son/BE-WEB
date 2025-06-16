@@ -9,7 +9,12 @@ import setupSwagger from "./src/common/configs/swagger-config.js";
 const app = express();
 connectDB(); // Kết nối đến MongoD
 // Middleware
-app.use(cors()); // <== cho phép mọi domain, hoặc cấu hình chi tiết hơn nếu cần
+app.use(
+  cors({
+    origin: "http://localhost:5173", // chỉ cho phép domain này gọi API
+    credentials: true, // cho phép gửi cookie
+  })
+); // <== cho phép mọi domain, hoặc cấu hình chi tiết hơn nếu cần
 app.use(express.json());
 
 app.use(

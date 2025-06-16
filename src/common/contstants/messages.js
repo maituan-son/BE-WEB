@@ -7,6 +7,18 @@ const MESSAGES = {
     UNAUTHORIZED: "Không được phép truy cập",
     FORBIDDEN: "Truy cập bị cấm",
   },
+  BRAND: {
+    CREATE_ERROR_EXISTS: "Thương hiệu đã tồn tại",
+    CREATE_SUCCESS: "Tạo thương hiệu thành công",
+    GET_SUCCESS: "Lấy danh sách thương hiệu thành công",
+    NOT_FOUND: "Không tìm thấy thương hiệu",
+    UPDATE_SUCCESS: "Cập nhật thương hiệu thành công",
+    DELETE_SUCCESS: "Xóa thương hiệu thành công",
+    SOFT_DELETE_SUCCESS: "Xóa mềm thương hiệu thành công",
+    SOFT_DELETE_ERROR: "Xóa mềm thương hiệu thất bại",
+    RESTORE_SUCCESS: "Khôi phục thương hiệu thành công",
+    RESTORE_ERROR: "Khôi phục thương hiệu thất bại",
+  },
   AUTH: {
     LOGIN_SUCCESS: "Đăng nhập thành công",
     LOGOUT_SUCCESS: "Đăng xuất thành công",

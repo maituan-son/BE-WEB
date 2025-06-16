@@ -1,6 +1,6 @@
-import createError from "../../common/configs/utils/error.js";
-import handleAsync from "../../common/configs/utils/handleAsync.js";
-import createResponse from "../../common/configs/utils/response.js";
+import createError from "../../common/utils/error.js";
+import createResponse from "../../common/utils/response.js";
+import handleAsync from "../../common/utils/handleAsync.js";
 import MESSAGES from "../../common/contstants/messages.js";
 import Brand from "./brand.model.js";
 
@@ -14,7 +14,7 @@ export const createBrand = handleAsync(async (req, res, next) => {
   );
 });
 export const getListBrand = handleAsync(async (req, res, next) => {
-  const data = await Brand.find();
+  const data = await Brand.find().lean();
   if (!data || data.length === 0) {
     return next(createError(404, MESSAGES.BRAND.NOT_FOUND));
   }
@@ -33,7 +33,7 @@ export const updateBrand = handleAsync(async (req, res, next) => {
     return res.json(
       createResponse(true, 200, MESSAGES.BRAND.UPDATE_SUCCESS, data)
     );
-  next(createError(false, 404, "Brand update failed!"));
+  next(createError(404, "Brand update failed!"));
 });
 export const deleteBrand = handleAsync(async (req, res, next) => {
   const data = await Brand.findByIdAndDelete(req.params.id);
@@ -41,7 +41,7 @@ export const deleteBrand = handleAsync(async (req, res, next) => {
     return res.json(
       createResponse(true, 200, MESSAGES.BRAND.DELETE_SUCCESS, data)
     );
-  next(createError(false, 404, MESSAGES.BRAND.NOT_FOUND));
+  next(createError(404, MESSAGES.BRAND.NOT_FOUND));
 });
 export const softDeleteBrand = handleAsync(async (req, res, next) => {
   const { id } = req.params;

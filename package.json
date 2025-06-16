@@ -4,10 +4,11 @@
   "discription": "Web Backend for HocLapTrinh",
   "main": "index.js",
   "type": "module",
+
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
-    "dev": "nodemon index.js",
+    "dev": "concurrently \"npm run swagger\" \"nodemon --experimental-specifier-resolution=node index.js\"",
     "swagger": "node --experimental-specifier-resolution=node src/common/configs/swagger-setup.js"
   },
   "keywords": [
@@ -22,6 +23,7 @@
   },
   "dependencies": {
     "cloudinary": "^1.41.3",
+    "concurrently": "^9.1.2",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
