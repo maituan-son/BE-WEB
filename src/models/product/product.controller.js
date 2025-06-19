@@ -3,6 +3,7 @@ import createResponse from "../../common/utils/response.js";
 import handleAsync from "../../common/utils/handleAsync.js";
 import MESSAGES from "../../common/contstants/messages.js";
 import Product from "./product.model.js";
+import { getProducts } from "./product.services.js";
 
 export const createProduct = handleAsync(async (req, res, next) => {
   const existing = await Product.findOne({ name: req.body.name });
@@ -15,7 +16,7 @@ export const createProduct = handleAsync(async (req, res, next) => {
 });
 
 export const getAllProducts = handleAsync(async (req, res, next) => {
-  const data = await Product.find();
+  const data = await getProducts(req.query);
   if (!data || data.length === 0) {
     return next(createError(404, MESSAGES.PRODUCT.NOT_FOUND));
   }

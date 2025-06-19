@@ -20,14 +20,14 @@ export const productColors = {
 };
 
 export const shoeSizes = {
-  SIZE_36: "SIZE_36",
-  SIZE_37: "SIZE_37",
-  SIZE_38: "SIZE_38",
-  SIZE_39: "SIZE_39",
-  SIZE_40: "SIZE_40",
-  SIZE_41: "SIZE_41",
-  SIZE_42: "SIZE_42",
-  SIZE_43: "SIZE_43",
-  SIZE_44: "SIZE_44",
-  SIZE_45: "SIZE_45",
+  36: 36,
+  37: 37,
+  38: 38,
+  39: 39,
+  40: 40,
+  41: 41,
+  42: 42,
+  43: 43,
+  44: 44,
+  45: 45,
 };
