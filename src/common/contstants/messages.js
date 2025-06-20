@@ -24,6 +24,7 @@ const MESSAGES = {
     LOGOUT_SUCCESS: "Đăng xuất thành công",
     REGISTER_SUCCESS: "Đăng ký thành công",
     LOGIN_FAILED: "Đăng nhập thất bại, vui lòng kiểm tra lại thông tin",
+    REGISTER_FAILED: "Đăng ký thất bại, vui lòng thử lại",
     UNAUTHORIZED: "Bạn cần đăng nhập để thực hiện hành động này",
     INVALID_TOKEN: "Token không hợp lệ hoặc đã hết hạn",
     EMAIL_NOT_VERIFIED: "Email chưa được xác minh",

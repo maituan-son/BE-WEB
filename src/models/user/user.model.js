@@ -3,7 +3,7 @@ import { userRoles } from "../enums.js";
 
 const userSchema = new mongoose.Schema(
   {
-    fullname: {
+    fullName: {
       type: String,
       required: true,
       trim: true,
@@ -15,8 +15,17 @@ const userSchema = new mongoose.Schema(
       lowercase: true,
       trim: true,
     },
+    password: {
+      type: String,
+      required: true, // ✅ THÊM TRƯỜNG PASSWORD
+    },
+    avatar: {
+      type: String,
+      default:
+        "https://inkythuatso.com/uploads/thumbnails/800/2023/03/10-anh-dai-dien-trang-inkythuatso-03-15-27-10.jpg", // Default avatar URL
+    },
     address: {
-      type: [String], // Array of strings for addresses
+      type: [String],
       default: [],
     },
     bio: {

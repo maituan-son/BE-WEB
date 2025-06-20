@@ -10,4 +10,15 @@ dot.config({
   assignToProcessEnv: true, // Gán các biến môi trường vào process.env
   overrideProcessEnv: true, // Ghi đè các biến môi trường đã tồn tại trong process.env
 }); // Load environment variables from .env file
-export const { PORT, HOST, DB_URL, SECRET_KEY, API_KEY } = process.env;
+export const {
+  PORT,
+  HOST,
+  DB_URL,
+  SECRET_KEY,
+  API_KEY,
+  JWT_SECRET_KEY,
+  JWT_EXPIRES_IN,
+  EMAIL_PASSWORD,
+  JWT_SECRET_KEY_FOR_EMAIL,
+  JWT_EXPIRES_IN_FOR_EMAIL,
+} = process.env;

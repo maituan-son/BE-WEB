@@ -12,18 +12,27 @@ export const getProducts = async (query) => {
     maxPrice,
   } = query;
 
-  // 1️⃣ Build filter
+  // ✅ ÉP KIỂU
+  const pageNumber = Number(page) || 1;
+  const limitNumber = Number(limit) || 20;
+
+  // ✅ BUILD FILTER
   const filter = {};
   if (color) filter.color = color;
   if (size) filter.size = Number(size);
   if (brand) filter.brand = brand;
-  if (minPrice) filter.price = { $gte: Number(minPrice) };
+
+  if (minPrice) {
+    filter.price = { $gte: Number(minPrice) };
+  }
+
   if (maxPrice) {
     filter.price = {
       ...filter.price,
       $lte: Number(maxPrice),
     };
   }
+
   if (q) {
     filter.$or = [
       { title: { $regex: q, $options: "i" } },
@@ -31,20 +40,21 @@ export const getProducts = async (query) => {
     ];
   }
 
-  // 2️⃣ Pagination
-  const skip = (page - 1) * limit;
+  // ✅ PAGINATION
+  const skip = (pageNumber - 1) * limitNumber;
 
-  // 3️⃣ Query
+  // ✅ QUERY
   const total = await Product.countDocuments(filter);
-  const data = await Product.find(filter).skip(skip).limit(Number(limit));
+  const data = await Product.find(filter).skip(skip).limit(limitNumber);
 
+  // ✅ RETURN RESULT
   return {
     total,
-    page: Number(page),
-    limit: Number(limit),
-    totalPages: Math.ceil(total / limit),
-    hasNextPage: page < Math.ceil(total / limit),
-    hasPrevPage: page > 1,
+    page: pageNumber,
+    limit: limitNumber,
+    totalPages: Math.ceil(total / limitNumber),
+    hasNextPage: pageNumber < Math.ceil(total / limitNumber),
+    hasPrevPage: pageNumber > 1,
     products: data,
   };
 };

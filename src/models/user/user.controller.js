@@ -28,6 +28,7 @@ export const createUser = handleAsync(async (req, res) => {
   const {
     fullname,
     email,
+    password,
     address,
     bio,
     role,
@@ -48,6 +49,7 @@ export const createUser = handleAsync(async (req, res) => {
   const newUser = new User({
     fullname,
     email,
+    password, // Ensure password is hashed before saving in production
     address,
     bio,
     role,
