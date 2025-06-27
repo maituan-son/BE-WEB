@@ -1,15 +1,13 @@
 import swaggerAutogen from "swagger-autogen";
 import { HOST, PORT } from "./enviroments.js";
-
-swaggerAutogen();
-
+const swaggerAutogenInstance = swaggerAutogen({ autoBody: true });
 const outputFile = "./src/common/configs/swagger-output.json";
 const endpointsFiles = ["./src/routers/index.js"]; // chỉnh sửa theo đường dẫn đến file chứa các endpoint của bạn
 
 const swaggerConfig = {
   info: {
-    title: "Backend API Codefarm Ecommerce K01 SonDaiLy",
-    description: "API Codefarm By SonDaiLy",
+    title: "Backend API Codefarm Ecommerce K01 SonDaiLY",
+    description: "API Codefarm By SonDaiLY",
     version: "1.0.0",
   },
   host: `${HOST}:${PORT}`,
@@ -27,4 +25,4 @@ const swaggerConfig = {
   },
 };
 
-swaggerAutogen()(outputFile, endpointsFiles, swaggerConfig);
+swaggerAutogenInstance(outputFile, endpointsFiles, swaggerConfig);

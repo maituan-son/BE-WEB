@@ -139,6 +139,24 @@ const MESSAGES = {
     RESET_PASSWORD_BODY:
       "Bạn đã yêu cầu đặt lại mật khẩu. Nhấn vào link dưới đây để tiếp tục: ",
   },
+  PRODUCT_VARIANT: {
+    CREATE_SUCCESS: "Tạo biến thể sản phẩm thành công",
+    CREATE_ERROR_EXISTS: "Biến thể sản phẩm đã tồn tại",
+    GET_SUCCESS: "Lấy danh sách biến thể sản phẩm thành công",
+    GET_BY_ID_SUCCESS: "Lấy thông tin biến thể sản phẩm thành công",
+    UPDATE_SUCCESS: "Cập nhật biến thể sản phẩm thành công",
+    DELETE_SUCCESS: "Xóa biến thể sản phẩm thành công",
+    NOT_FOUND: "Không tìm thấy biến thể sản phẩm",
+  },
+  ATTRIBUTE_VALUE: {
+    CREATE_SUCCESS: "Tạo giá trị thuộc tính thành công",
+    CREATE_ERROR_EXISTS: "Giá trị thuộc tính đã tồn tại",
+    GET_SUCCESS: "Lấy danh sách giá trị thuộc tính thành công",
+    GET_BY_ID_SUCCESS: "Lấy thông tin giá trị thuộc tính thành công",
+    UPDATE_SUCCESS: "Cập nhật giá trị thuộc tính thành công",
+    DELETE_SUCCESS: "Xóa giá trị thuộc tính thành công",
+    NOT_FOUND: "Không tìm thấy giá trị thuộc tính",
+  },
 };
 
 export default MESSAGES;

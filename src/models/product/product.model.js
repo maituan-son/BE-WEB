@@ -1,30 +1,38 @@
-import e from "express";
 import mongoose from "mongoose";
-import { productColors, shoeSizes } from "../enums.js";
 const productSchema = new mongoose.Schema(
   {
     title: String,
     thumbnail: String,
+    images: {
+      type: [String], // Danh sách URL ảnh
+    },
     description: String,
     shortDescription: String,
-    price: Number,
-    oldPrice: Number,
+    specifications: String,
+    priceDefault: Number,
+    discountPercentage: Number,
     slug: String,
-    brand: { type: mongoose.Schema.Types.ObjectId, ref: "Brand" },
-    subCategory: { type: mongoose.Schema.Types.ObjectId, ref: "SubCategory" },
-    color: {
-      type: String,
-      enum: productColors,
-    },
-    size: {
-      type: Number,
-      enum: shoeSizes,
-    },
-    stock: Number,
-    soldCount: Number,
+    brandId: { type: mongoose.Schema.Types.ObjectId, ref: "Brand" },
+    subCategoryId: { type: mongoose.Schema.Types.ObjectId, ref: "SubCategory" },
+    soldCount: { type: Number, default: 0 },
+    averageRating: Number,
+    ratingCount: Number,
     seoTitle: String,
     seoDescription: String,
-    tags: [String],
+    tags: { type: [String], default: [] },
+    variants: {
+      type: [Object],
+      default: [],
+    },
+    isActive: {
+      type: Boolean,
+      default: true, // Trạng thái hiển thị
+    },
+
+    stockTotal: {
+      type: Number,
+      default: 0, // Tổng tồn kho
+    },
     deletedAt: { type: Date, default: null },
     updatedAt: { type: Date, default: Date.now },
     deletedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },

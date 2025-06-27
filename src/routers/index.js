@@ -5,9 +5,14 @@ import imageRoutes from "./imageRoutes.js";
 import subCategoryRoutes from "../models/subcategory/subcategory.router.js";
 import brandRoutes from "../models/brand/brand.router.js";
 import authRouter from "../models/auth/auth.router.js";
+import attributeRoutes from "../models/attribute/attribute.routes.js";
+import productVariantRoutes from "../models/product-variant/product-variant.router.js";
+import attributeValueRoutes from "../models/attribute-Value/attribute-value.routes.js";
 
 const router = Router();
-
+router.use("/attributes", attributeRoutes);
+router.use("/attribute-values", attributeValueRoutes);
+router.use("/product-variants", productVariantRoutes);
 router.use("/products", productRoutes);
 router.use("/categories", categoryRoutes);
 router.use("/subcategories", subCategoryRoutes);
