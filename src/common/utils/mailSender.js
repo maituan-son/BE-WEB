@@ -2,7 +2,7 @@ import nodeemailer from "nodemailer";
 import createError from "./error.js";
 import { EMAIL_PASSWORD } from "../configs/enviroments.js";
 
-const mailSender = async (email, subject, text) => {
+const mailSender = async (email, subject, html) => {
   const transporter = nodeemailer.createTransport({
     service: "gmail",
     auth: {
@@ -16,7 +16,7 @@ const mailSender = async (email, subject, text) => {
       from: "SonDaiLY",
       to: email,
       subject,
-      text,
+      html,
     });
   } catch (error) {
     createError(500, "Gửi email thất bại, vui lòng thử lại sau");

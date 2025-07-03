@@ -506,6 +506,13 @@
     "/categories/": {
       "get": {
         "description": "",
+        "parameters": [
+          {
+            "name": "trash",
+            "in": "query",
+            "type": "string"
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -586,7 +593,7 @@
       }
     },
     "/categories/soft-delete/{id}": {
-      "delete": {
+      "patch": {
         "description": "",
         "parameters": [
           {
@@ -961,6 +968,24 @@
                 }
               }
             }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/auth/verify-email/{token}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "type": "string"
           }
         ],
         "responses": {

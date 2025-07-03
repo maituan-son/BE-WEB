@@ -3,6 +3,8 @@ import createError from "../../common/utils/error.js";
 import createResponse from "../../common/utils/response.js";
 import handleAsync from "../../common/utils/handleAsync.js";
 import MESSAGES from "../../common/contstants/messages.js";
+import paginate from "../../common/utils/paginate.js";
+import search from "../../common/utils/search.js";
 
 export const createSubCategory = handleAsync(async (req, res, next) => {
   const existing = await SubCategory.findOne({ title: req.body.title });
@@ -24,16 +26,36 @@ export const createSubCategory = handleAsync(async (req, res, next) => {
 // *{ "categoryParentId": "123" } -> body
 
 export const getListSubCategory = handleAsync(async (req, res, next) => {
-  const { categoryParentId } = req.query; //hiện trang categoryParentId từ query string
-  const filter = categoryParentId ? { categoryParentId } : {};
-  const data = await SubCategory.find(filter)
+  const isTrash = req.query.trash === "true";
+  const { page, limit, skip } = paginate(req);
+  const searchFilter = search(req, ["title", "description"]); // tìm theo các field này
+
+  const baseFilter = isTrash
+    ? { deletedAt: { $ne: null } }
+    : { deletedAt: null };
+  const finalFilter = { ...baseFilter, ...searchFilter };
+
+  const total = await SubCategory.countDocuments(finalFilter);
+  const data = await SubCategory.find(finalFilter)
     .populate("categoryParentId", "title")
-    .lean();
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(limit);
+
   if (!data || data.length === 0) {
     return next(createError(404, MESSAGES.SUBCATEGORY.NOT_FOUND));
   }
+
   return res.json(
-    createResponse(true, 200, MESSAGES.SUBCATEGORY.GET_SUCCESS, data)
+    createResponse(true, 200, MESSAGES.SUBCATEGORY.GET_SUCCESS, {
+      data,
+      pagination: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
+    })
   );
 });
 

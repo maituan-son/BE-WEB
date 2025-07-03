@@ -42,16 +42,37 @@ export const authRegister = handleAsync(async (req, res, next) => {
     JWT_SECRET_KEY_FOR_EMAIL,
     { expiresIn: JWT_EXPIRES_IN_FOR_EMAIL }
   );
-  const verifyEmailLink = `http://localhost:8888/api/auth/verify-email/${isVerifyEmailToken}`;
-  mailSender(
-    newUser.email,
-    "Xác thực email",
-    `Vui lòng xác thực email của bạn bằng cách nhấp vào liên kết sau: ${verifyEmailLink}`
-  );
+  const baseUrl = process.env.EMAIL_VERIFY_BASE_URL || "http://localhost:8080";
+  const verifyEmailLink = `${baseUrl}/api/auth/verify-email/${isVerifyEmailToken}`;
+  const htmlContent = `
+    <div style="max-width:480px;margin:0 auto;padding:32px 24px;background:#fff;border-radius:12px;box-shadow:0 2px 16px rgba(60,72,88,0.08);font-family:'Segoe UI',Arial,sans-serif;">
+      <div style="text-align:center;">
+        <img src="https://cdn-icons-png.flaticon.com/512/561/561127.png" alt="Verify Email" style="width:64px;margin-bottom:16px;">
+        <h2 style="color:#222;margin-bottom:8px;">Xác thực email của bạn</h2>
+        <p style="color:#555;font-size:16px;margin-bottom:24px;">
+          Cảm ơn bạn đã đăng ký! Vui lòng xác thực email của bạn bằng cách nhấn vào nút bên dưới.
+        </p>
+        <a href="${verifyEmailLink}" style="display:inline-block;padding:12px 32px;background:#2563eb;color:#fff;text-decoration:none;border-radius:6px;font-weight:600;font-size:16px;box-shadow:0 2px 8px rgba(37,99,235,0.12);transition:background 0.2s;">
+          Xác thực Email
+        </a>
+        <p style="color:#888;font-size:13px;margin-top:32px;">
+          Nếu bạn không đăng ký tài khoản, vui lòng bỏ qua email này.
+        </p>
+      </div>
+    </div>
+  `;
+  mailSender(newUser.email, "Xác thực email", htmlContent);
 
   await newUser.save();
   return res.json(
-    createResponse(true, 201, MESSAGES.AUTH.REGISTER_SUCCESS, { newUser })
+    createResponse(true, 201, MESSAGES.AUTH.REGISTER_SUCCESS, {
+      user: {
+        id: newUser._id,
+        fullName: newUser.fullName,
+        email: newUser.email,
+        isVerifyEmail: false, // hoặc newUser.isVerified nếu đã có field này trong schema
+      },
+    })
   );
 });
 
@@ -66,6 +87,15 @@ export const authLogin = handleAsync(async (req, res, next) => {
 
   if (!user || !(await bcrypt.compare(password, user.password))) {
     return next(createError(401, MESSAGES.AUTH.LOGIN_FAILED));
+  }
+
+  if (!user.isVerifyEmail) {
+    return next(
+      createError(
+        403,
+        "Email chưa được xác thực. Vui lòng kiểm tra email để xác thực tài khoản."
+      )
+    );
   }
 
   const token = jwt.sign({ id: user._id, role: user.role }, JWT_SECRET_KEY, {
@@ -164,4 +194,25 @@ export const authFotgotPassword = handleAsync(async (req, res, next) => {
   return res.json(
     createResponse(true, 200, MESSAGES.AUTH.PASSWORD_RESET_SUCCESS)
   );
+});
+export const verifyEmail = handleAsync(async (req, res, next) => {
+  const { token } = req.params;
+
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET_KEY_FOR_EMAIL);
+    const user = await User.findById(decoded.id);
+
+    if (!user) {
+      return next(createError(404, MESSAGES.USER.NOT_FOUND));
+    }
+
+    user.isVerifyEmail = true; // Cần có field isVerifyEmail trong schema
+    await user.save();
+
+    return res.json(createResponse(true, 200, "Xác thực email thành công!"));
+  } catch (err) {
+    return next(
+      createError(400, "Link xác thực không hợp lệ hoặc đã hết hạn.")
+    );
+  }
 });

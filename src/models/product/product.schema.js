@@ -3,33 +3,29 @@ import { z } from "zod";
 export const productSchema = z.object({
   title: z.string().min(1, "Title is required"),
   thumbnail: z.string().url("Thumbnail must be a valid URL").optional(),
+  images: z.array(z.string().url("Each image must be a valid URL")).optional(),
   description: z.string().min(1, "Description is required"),
-  shortDescription: z.string().min(1, "Short description is required"),
-  price: z.number().min(0, "Price must be a positive number"),
-  oldPrice: z.number().min(0, "Old price must be a positive number").optional(),
-  slug: z
-    .string()
-    .min(1, "Slug is required")
-    .regex(
-      /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
-      "Slug must be lowercase and can only contain letters, numbers, and hyphens"
-    ),
-  brand: z.string().min(1, "Brand ID is required"),
-  subCategory: z.string().min(1, "SubCategory ID is required"),
-  color: z.enum(["red", "blue", "green", "black", "white"]).optional(),
-  size: z
-    .enum(["36", "37", "38", "39", "40", "41", "42", "43", "44", "45"])
-    .optional(),
-  stock: z.number().min(0, "Stock must be a non-negative number").optional(),
-  soldCount: z
+  shortDescription: z.string().optional(),
+  specifications: z.string().optional(),
+  priceDefault: z.number().min(0, "Price must be a positive number"),
+  discountPercentage: z
     .number()
-    .min(0, "Sold count must be a non-negative number")
-    .optional(),
-  seoTitle: z.string().min(1, "SEO title is required").optional(),
-  seoDescription: z.string().min(1, "SEO description is required").optional(),
-  tags: z.array(z.string()).optional(),
-  deletedAt: z.date().optional(),
-  updatedAt: z.date().optional(),
-  deletedBy: z.string().optional(),
-  updatedBy: z.string().optional(),
+    .min(0, "Discount percentage must be non-negative")
+    .max(100, "Discount percentage cannot exceed 100"),
+  slug: z.string().min(1, "Slug is required"),
+  brandId: z.string().optional(), // Assuming brandId is a string (ObjectId)
+  subCategoryId: z.string().optional(), // Assuming subCategoryId is a string (ObjectId)
+  soldCount: z.number().default(0),
+  averageRating: z.number().min(0).max(5).optional(),
+  ratingCount: z.number().default(0),
+  seoTitle: z.string().optional(),
+  seoDescription: z.string().optional(),
+  tags: z.array(z.string()).default([]),
+  variants: z.array(z.object({})).default([]), // Assuming variants are objects
+  isActive: z.boolean().default(true),
+  stockTotal: z.number().default(0),
+  deletedAt: z.date().nullable().optional(),
+  updatedAt: z.date().default(() => new Date()),
+  deletedBy: z.string().optional(), // Assuming deletedBy is a string (ObjectId)
+  updatedBy: z.string().optional(), // Assuming updatedBy is a string (ObjectId
 });
