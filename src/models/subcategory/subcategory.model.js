@@ -35,5 +35,8 @@ const subCategorySchema = new mongoose.Schema(
     timestamps: true, // Automatically manage createdAt and updatedAt fields
   }
 );
+subCategorySchema.index({ categoryParentId: 1 });
+subCategorySchema.index({ deletedAt: 1 });
+subCategorySchema.index({ slug: 1 });
 
 export default mongoose.model("Subcategory", subCategorySchema);

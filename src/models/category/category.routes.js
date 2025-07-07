@@ -14,7 +14,6 @@ import { categorySchema } from "./category.schema.js";
 const categoryRoutes = Router();
 
 categoryRoutes.get("/", getListCategory);
-
 categoryRoutes.get("/:id", getDetailCategory);
 categoryRoutes.delete("/:id", deleteCategory);
 categoryRoutes.patch("/soft-delete/:id", softDeleteCategory);

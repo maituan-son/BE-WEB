@@ -1,8 +1,26 @@
-const express = require("express");
-const router = express.Router();
-const NewsController = require("./news.controller");
+import { Router } from "express";
+import validBodyRequest from "../../common/middleware/validBodyRequest.js";
+import { NewsSchema } from "./news.schema.js";
+import {
+  createNews,
+  deleteNews,
+  getDetailNews,
+  getListNews,
+  restoreNews,
+  softDeleteNews,
+  updateNews,
+} from "./news.controller.js";
 
-// Define routes here
-// Example: router.get('/', NewsController.getAll);
+const newsRoutes = Router();
 
-module.exports = router;
+newsRoutes.get("/", getListNews);
+
+newsRoutes.get("/:id", getDetailNews);
+newsRoutes.delete("/:id", deleteNews);
+newsRoutes.patch("/soft-delete/:id", softDeleteNews);
+newsRoutes.patch("/restore/:id", restoreNews);
+newsRoutes.use(validBodyRequest(NewsSchema));
+newsRoutes.post("/", createNews);
+newsRoutes.patch("/:id", updateNews);
+
+export default newsRoutes;

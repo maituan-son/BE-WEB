@@ -3,6 +3,8 @@ import createError from "../../common/utils/error.js";
 import createResponse from "../../common/utils/response.js";
 import handleAsync from "../../common/utils/handleAsync.js";
 import MESSAGES from "../../common/contstants/messages.js";
+import paginate from "../../common/utils/paginate.js";
+import search from "../../common/utils/search.js";
 
 export const createBanner = handleAsync(async (req, res, next) => {
   const existing = await Banner.findOne({ title: req.body.title });
@@ -15,11 +17,15 @@ export const createBanner = handleAsync(async (req, res, next) => {
 });
 
 export const getListBanner = handleAsync(async (req, res, next) => {
-  const data = await Banner.find();
-  if (!data || data.length === 0) {
-    return next(createError(404, MESSAGES.BANNER.NOT_FOUND));
-  }
-  return res.json(createResponse(true, 200, MESSAGES.BANNER.GET_SUCCESS, data));
+  const { page, limit } = req.query;
+  const options = {
+    page: page || 1,
+    limit: limit || 10,
+  };
+  const data = await Banner.find().sort({ createdAt: -1 }).paginate(options);
+  return res.json(
+    createResponse(true, 200, MESSAGES.BANNER.GET_LIST_SUCCESS, data)
+  );
 });
 
 export const getDetailBanner = handleAsync(async (req, res, next) => {

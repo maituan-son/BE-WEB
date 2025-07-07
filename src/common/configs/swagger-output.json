@@ -633,7 +633,7 @@
         "description": "",
         "parameters": [
           {
-            "name": "categoryParentId",
+            "name": "trash",
             "in": "query",
             "type": "string"
           }

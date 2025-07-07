@@ -8,6 +8,7 @@ import authRouter from "../models/auth/auth.router.js";
 import attributeRoutes from "../models/attribute/attribute.routes.js";
 import productVariantRoutes from "../models/product-variant/product-variant.router.js";
 import attributeValueRoutes from "../models/attribute-Value/attribute-value.routes.js";
+import newsRoutes from "../models/news/news.router.js";
 
 const router = Router();
 router.use("/attributes", attributeRoutes);
@@ -19,5 +20,5 @@ router.use("/subcategories", subCategoryRoutes);
 router.use("/brands", brandRoutes);
 router.use("/uploadImage", imageRoutes);
 router.use("/auth", authRouter);
-
+router.use("/news", newsRoutes);
 export default router;
