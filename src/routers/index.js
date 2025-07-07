@@ -9,6 +9,8 @@ import attributeRoutes from "../models/attribute/attribute.routes.js";
 import productVariantRoutes from "../models/product-variant/product-variant.router.js";
 import attributeValueRoutes from "../models/attribute-Value/attribute-value.routes.js";
 import newsRoutes from "../models/news/news.router.js";
+import bannerRoutes from "../models/banner/banner.router.js";
+import voucherRoutes from "../models/voucher/voucher.router.js";
 
 const router = Router();
 router.use("/attributes", attributeRoutes);
@@ -21,4 +23,6 @@ router.use("/brands", brandRoutes);
 router.use("/uploadImage", imageRoutes);
 router.use("/auth", authRouter);
 router.use("/news", newsRoutes);
+router.use("/vouchers", voucherRoutes);
+router.use("/banners", bannerRoutes);
 export default router;
