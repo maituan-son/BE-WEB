@@ -1,8 +1,8 @@
-const express = require("express");
-const router = express.Router();
-const CartController = require("./cart.controller");
+import { Router } from "express";
+import { updateCart } from "./cart.controller.js";
+import { veriflyUser } from "../../common/middleware/veriflyUser.js";
 
-// Define routes here
-// Example: router.get('/', CartController.getAll);
+const cartRoutes = Router();
+cartRoutes.post("/", veriflyUser, updateCart);
 
-module.exports = router;
+export default cartRoutes;

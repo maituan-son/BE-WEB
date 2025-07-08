@@ -6,6 +6,7 @@ import handleAsync from "../../common/utils/handleAsync.js";
 import MESSAGES from "../../common/contstants/messages.js";
 import User from "../user/user.model.js";
 import { userRoles } from "../enums.js";
+import { createCartForUser } from "../cart/cart.services.js";
 import {
   JWT_EXPIRES_IN,
   JWT_SECRET_KEY,
@@ -22,6 +23,7 @@ export const authRegister = handleAsync(async (req, res, next) => {
   }
 
   const existingUser = await User.findOne({ email });
+
   if (existingUser) {
     return next(createError(409, MESSAGES.AUTH.EMAIL_ALREADY_EXISTS));
   }
@@ -62,13 +64,15 @@ export const authRegister = handleAsync(async (req, res, next) => {
     </div>
   `;
   mailSender(newUser.email, "Xác thực email", htmlContent);
+  // Create a cart for the new user
 
   await newUser.save();
+  const cart = await createCartForUser(newUser._id);
+  console.log(cart);
   return res.json(
     createResponse(true, 201, MESSAGES.AUTH.REGISTER_SUCCESS, {
       user: {
         id: newUser._id,
-        fullName: newUser.fullName,
         email: newUser.email,
         isVerifyEmail: false, // hoặc newUser.isVerified nếu đã có field này trong schema
       },
@@ -103,7 +107,17 @@ export const authLogin = handleAsync(async (req, res, next) => {
   });
 
   return res.json(
-    createResponse(true, 200, MESSAGES.AUTH.LOGIN_SUCCESS, { token })
+    createResponse(true, 200, MESSAGES.AUTH.LOGIN_SUCCESS, {
+      token,
+      user: {
+        id: user._id,
+        email: user.email,
+        fullName: user.fullName,
+        role: user.role,
+        avatar: user.avatar, // nếu có
+        isVerifyEmail: user.isVerifyEmail, // ⚠️ dòng quan trọng nhất
+      },
+    })
   );
 });
 

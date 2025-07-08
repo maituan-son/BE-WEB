@@ -1,25 +1,32 @@
 import mongoose from "mongoose";
-
 const cartSchema = new mongoose.Schema(
   {
-    userId: {
+    user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
-    createdAt: {
-      type: Date,
-      default: Date.now, // Automatically set the creation date
-    },
-    updatedAt: {
-      type: Date,
-      default: Date.now, // Automatically set the update date
-    },
+    items: [
+      {
+        product: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Product",
+          required: true,
+        },
+        quantity: {
+          type: Number,
+          default: 1,
+          min: 1,
+        },
+      },
+    ],
   },
   {
-    timestamps: true, // Automatically manage createdAt and updatedAt fields
-    versionKey: false, // Disable the __v field
+    timeStamps: true,
+    versionKey: false,
   }
 );
 
-export default mongoose.model("Cart", cartSchema);
+const Cart = mongoose.model("Cart", cartSchema);
+
+export default Cart;
