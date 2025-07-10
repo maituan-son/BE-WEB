@@ -3,7 +3,8 @@ import createResponse from "../../common/utils/response.js";
 import handleAsync from "../../common/utils/handleAsync.js";
 import MESSAGES from "../../common/contstants/messages.js";
 import Product from "./product.model.js";
-import { getProducts } from "./product.services.js";
+import paginate from "../../common/utils/paginate.js";
+import search from "../../common/utils/search.js";
 
 export const createProduct = handleAsync(async (req, res, next) => {
   const existing = await Product.findOne({ name: req.body.name });
@@ -16,12 +17,35 @@ export const createProduct = handleAsync(async (req, res, next) => {
 });
 
 export const getAllProducts = handleAsync(async (req, res, next) => {
-  const data = await getProducts(req.query);
+  const isTrash = req.query.trash === "true";
+  const { page, limit, skip } = paginate(req);
+  const searchFilter = search(req, ["name", "description"]); // tìm theo các field này
+
+  const baseFilter = isTrash
+    ? { deletedAt: { $ne: null } }
+    : { deletedAt: null };
+  const finalFilter = { ...baseFilter, ...searchFilter };
+
+  const total = await Product.countDocuments(finalFilter);
+  const data = await Product.find(finalFilter)
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(limit);
+
   if (!data || data.length === 0) {
     return next(createError(404, MESSAGES.PRODUCT.NOT_FOUND));
   }
+
   return res.json(
-    createResponse(true, 200, MESSAGES.PRODUCT.GET_SUCCESS, data)
+    createResponse(true, 200, MESSAGES.PRODUCT.GET_SUCCESS, {
+      data,
+      pagination: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
+    })
   );
 });
 
