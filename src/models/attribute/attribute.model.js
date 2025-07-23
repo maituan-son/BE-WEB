@@ -16,14 +16,18 @@ const attributeSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    isActive: {
+      type: Boolean,
+      default: true, // Default to true for active attributes
+    },
     deletedAt: {
       type: Date,
       default: null, // Soft delete field
     },
   },
   {
-    timeseries: true, // Automatically manage createdAt and updatedAt fields
-    versionKey: false, // Disable the __v field
+    timestamps: true, // ✅ Tự thêm createdAt & updatedAt
+    versionKey: false, // ✅ Không tạo __v
   }
 );
 

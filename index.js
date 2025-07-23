@@ -5,9 +5,18 @@ import { HOST, PORT } from "./src/common/configs/enviroments.js";
 import fileUpload from "express-fileupload";
 import connectDB from "./src/common/configs/connectdb.js";
 import setupSwagger from "./src/common/configs/swagger-config.js";
+import { handlPayosWebook } from "./src/models/order/order.controller.js";
 
 const app = express();
 connectDB(); // Kết nối đến MongoD
+
+// Webhook route (before JSON middleware to handle raw data)
+app.post(
+  "/webhook",
+  express.raw({ type: "application/json" }),
+  handlPayosWebook
+);
+
 // Middleware
 app.use(
   cors({
@@ -16,7 +25,6 @@ app.use(
   })
 ); // <== cho phép mọi domain, hoặc cấu hình chi tiết hơn nếu cần
 app.use(express.json());
-
 app.use(
   fileUpload({
     useTempFiles: true,
@@ -27,6 +35,7 @@ app.use(
 setupSwagger(app);
 // Routes
 app.use("/api", router);
+app.post("/webhook", handlPayosWebook);
 
 app.listen(PORT, () => {
   console.log(`Server running at http://${HOST}:${PORT}/`);

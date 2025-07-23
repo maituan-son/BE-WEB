@@ -6,8 +6,8 @@ import ProductVariant from "./product-variant.model.js";
 
 export const createProductVariant = handleAsync(async (req, res, next) => {
   const existing = await ProductVariant.findOne({
-    productId: req.body.productId,
-    attributeValues: req.body.attributeValues,
+    attributesId: req.body.attributesId,
+    attributeValuesId: req.body.attributeValuesId,
   });
   if (existing)
     return next(createError(400, MESSAGES.PRODUCT_VARIANT.CREATE_ERROR_EXISTS));
@@ -18,9 +18,7 @@ export const createProductVariant = handleAsync(async (req, res, next) => {
   );
 });
 export const getListProductVariant = handleAsync(async (req, res, next) => {
-  const data = await ProductVariant.find().populate(
-    "productId attributeValues"
-  );
+  const data = await ProductVariant.find();
   if (!data || data.length === 0) {
     return next(createError(404, MESSAGES.PRODUCT_VARIANT.NOT_FOUND));
   }
@@ -29,9 +27,7 @@ export const getListProductVariant = handleAsync(async (req, res, next) => {
   );
 });
 export const getDetailProductVariant = handleAsync(async (req, res, next) => {
-  const data = await ProductVariant.findById(req.params.id).populate(
-    "productId attributeValues"
-  );
+  const data = await ProductVariant.findById(req.params.id);
   if (!data) {
     return next(createError(404, MESSAGES.PRODUCT_VARIANT.NOT_FOUND));
   }

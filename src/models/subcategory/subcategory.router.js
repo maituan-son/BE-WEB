@@ -15,7 +15,7 @@ const subCategoryRoutes = Router();
 subCategoryRoutes.get("/", getListSubCategory);
 subCategoryRoutes.get("/:id", getDetailSubCategory);
 subCategoryRoutes.delete("/:id", deleteSubCategory);
-subCategoryRoutes.delete("/soft-delete/:id", softDeleteSubCategory);
+subCategoryRoutes.patch("/soft-delete/:id", softDeleteSubCategory);
 subCategoryRoutes.patch("/restore/:id", restoreSubCategory);
 subCategoryRoutes.use(validBodyRequest(subcategorySchema));
 subCategoryRoutes.post("/", createSubCategory);

@@ -1,8 +1,15 @@
 import { Router } from "express";
-import { updateCart } from "./cart.controller.js";
-import { veriflyUser } from "../../common/middleware/veriflyUser.js";
+import {
+  addToCart,
+  deleteCart,
+  getCart,
+  updateCart,
+} from "./cart.controller.js";
 
 const cartRoutes = Router();
-cartRoutes.post("/", veriflyUser, updateCart);
+cartRoutes.post("/cart/", addToCart);
+cartRoutes.get("/", getCart);
+cartRoutes.delete("/", deleteCart);
+cartRoutes.put("/item/:itemId", updateCart);
 
 export default cartRoutes;

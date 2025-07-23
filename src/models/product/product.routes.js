@@ -5,6 +5,7 @@ import {
   deleteProduct,
   getAllProducts,
   getProductById,
+  softDeleteProduct,
   updateProduct,
 } from "./product.controller.js";
 import validBodyRequest from "../../common/middleware/validBodyRequest.js";
@@ -21,11 +22,12 @@ const allowAdmins = [
 
 productRoutes.get("/", getAllProducts);
 productRoutes.get("/:id", getProductById);
-productRoutes.post("/", allowAdmins, createProduct);
-productRoutes.patch("/:id", allowAdmins, updateProduct);
+productRoutes.post("/", createProduct);
+
 productRoutes.delete("/:id", allowAdmins, deleteProduct);
+productRoutes.patch("/soft-delete/:id", softDeleteProduct);
 productRoutes.use(validBodyRequest(productSchema));
-productRoutes.delete("/soft-delete/:id", allowAdmins, deleteProduct);
+productRoutes.patch("/:id", updateProduct);
 productRoutes.delete("/restore/:id", allowAdmins, deleteProduct);
 
 export default productRoutes;

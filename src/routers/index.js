@@ -16,6 +16,7 @@ import { veriflyUser } from "../common/middleware/veriflyUser.js";
 import authenticate from "../common/middleware/authenticate.js";
 import authorizeRole from "../common/middleware/authorizeRole.js";
 import { userRoles } from "../models/enums.js";
+import orderRoutes from "../models/order/order.routes.js";
 
 const router = Router();
 
@@ -31,11 +32,6 @@ router.use("/auth", authRouter);
 router.use("/news", newsRoutes);
 router.use("/vouchers", voucherRoutes);
 router.use("/banners", bannerRoutes);
-router.use(
-  "/carts",
-  veriflyUser,
-  authenticate,
-  authorizeRole(userRoles.MEMBER),
-  cartRoutes
-);
+router.use("/carts", veriflyUser, cartRoutes);
+router.use("/payos", orderRoutes);
 export default router;

@@ -166,9 +166,30 @@
                 },
                 "attributeId": {
                   "example": "any"
+                },
+                "valueCode": {
+                  "example": "any"
                 }
               }
             }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/attribute-values/attribute/{id}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
           }
         ],
         "responses": {
@@ -282,10 +303,10 @@
             "schema": {
               "type": "object",
               "properties": {
-                "productId": {
+                "attributesId": {
                   "example": "any"
                 },
-                "attributeValues": {
+                "attributeValuesId": {
                   "example": "any"
                 }
               }
@@ -316,7 +337,7 @@
           }
         }
       },
-      "put": {
+      "patch": {
         "description": "",
         "parameters": [
           {
@@ -390,22 +411,7 @@
         "description": "",
         "parameters": [
           {
-            "name": "page",
-            "in": "query",
-            "type": "string"
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "type": "string"
-          },
-          {
-            "name": "sort",
-            "in": "query",
-            "type": "string"
-          },
-          {
-            "name": "searchTerm",
+            "name": "trash",
             "in": "query",
             "type": "string"
           }
@@ -425,7 +431,7 @@
             "schema": {
               "type": "object",
               "properties": {
-                "name": {
+                "title": {
                   "example": "any"
                 }
               }
@@ -456,7 +462,7 @@
           }
         }
       },
-      "patch": {
+      "delete": {
         "description": "",
         "parameters": [
           {
@@ -472,7 +478,7 @@
           }
         }
       },
-      "delete": {
+      "patch": {
         "description": "",
         "parameters": [
           {
@@ -490,7 +496,7 @@
       }
     },
     "/products/soft-delete/{id}": {
-      "delete": {
+      "patch": {
         "description": "",
         "parameters": [
           {
@@ -743,7 +749,7 @@
       }
     },
     "/subcategories/soft-delete/{id}": {
-      "delete": {
+      "patch": {
         "description": "",
         "parameters": [
           {
@@ -1397,7 +1403,7 @@
         }
       }
     },
-    "/carts/": {
+    "/carts/cart/": {
       "post": {
         "description": "",
         "parameters": [
@@ -1412,7 +1418,10 @@
             "schema": {
               "type": "object",
               "properties": {
-                "items": {
+                "productId": {
+                  "example": "any"
+                },
+                "quantity": {
                   "example": "any"
                 }
               }
@@ -1422,12 +1431,90 @@
         "responses": {
           "200": {
             "description": "OK"
+          }
+        }
+      }
+    },
+    "/carts/": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/carts/item/{itemId}": {
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "itemId",
+            "in": "path",
+            "required": true,
+            "type": "string"
           },
-          "401": {
-            "description": "Unauthorized"
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
           },
-          "404": {
-            "description": "Not Found"
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "quantity": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/payos/payos": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }

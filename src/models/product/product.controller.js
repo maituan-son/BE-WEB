@@ -7,7 +7,7 @@ import paginate from "../../common/utils/paginate.js";
 import search from "../../common/utils/search.js";
 
 export const createProduct = handleAsync(async (req, res, next) => {
-  const existing = await Product.findOne({ name: req.body.name });
+  const existing = await Product.findOne({ title: req.body.title });
   if (existing)
     return next(createError(400, MESSAGES.PRODUCT.CREATE_ERROR_EXISTS));
   const data = await Product.create(req.body);
@@ -50,7 +50,17 @@ export const getAllProducts = handleAsync(async (req, res, next) => {
 });
 
 export const getProductById = handleAsync(async (req, res, next) => {
-  const data = await Product.findById(req.params.id);
+  const data = await Product.findById(req.params.id).populate({
+    path: "variants",
+    populate: [
+      {
+        path: "attributeId",
+      },
+      {
+        path: "valueId",
+      },
+    ],
+  });
   if (!data) {
     return next(createError(404, MESSAGES.PRODUCT.NOT_FOUND));
   }
@@ -84,9 +94,10 @@ export const deleteProduct = handleAsync(async (req, res, next) => {
 export const softDeleteProduct = handleAsync(async (req, res, next) => {
   const { id } = req.params;
   if (id) {
-    const data = await Product.findByIdAndUpdate(
-      { id, deletedAt: null },
-      { deletedAt: new Date() }
+    const data = await Product.findOneAndUpdate(
+      { _id: id, deletedAt: null },
+      { deletedAt: new Date() },
+      { new: true }
     );
     if (data) {
       return res.json(

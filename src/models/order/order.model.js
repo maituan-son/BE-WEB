@@ -1,5 +1,6 @@
-class OrderModel {
-  // Add model methods and properties here
-}
+import mongoose from "mongoose";
 
-module.exports = OrderModel;
+const orderSchema = new mongoose.Schema({});
+const Order = mongoose.model("Order", orderSchema);
+
+export default Order;

@@ -7,12 +7,14 @@ import {
   softDeleteAttributeValue,
   updateAttributeValue,
   restoreAttributeValue,
+  getListByIdAttribute,
 } from "./attribute-value.controller.js";
 import validBodyRequest from "../../common/middleware/validBodyRequest.js";
 import attributeValueSchema from "./attribute-value.schema.js";
 
 const attributeValueRoutes = Router();
 attributeValueRoutes.get("/", getListAttributeValue);
+attributeValueRoutes.get("/attribute/:id", getListByIdAttribute);
 attributeValueRoutes.get("/:id", getDetailAttributeValue);
 attributeValueRoutes.delete("/:id", deleteAttributeValue);
 attributeValueRoutes.delete("/soft-delete/:id", softDeleteAttributeValue);

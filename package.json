@@ -21,6 +21,8 @@
     "nodemon": "^3.1.10"
   },
   "dependencies": {
+    "@ngrok/ngrok": "^1.5.1",
+    "@payos/node": "^1.0.10",
     "bcryptjs": "^3.0.2",
     "cloudinary": "^1.41.3",
     "concurrently": "^9.1.2",

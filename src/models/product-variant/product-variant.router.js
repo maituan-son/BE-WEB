@@ -18,7 +18,7 @@ productVariantRoutes.post(
   validBodyRequest(productVariantSchema),
   createProductVariant
 );
-productVariantRoutes.put(
+productVariantRoutes.patch(
   "/:id",
   validBodyRequest(productVariantSchema),
   updateProductVariant

@@ -21,9 +21,42 @@ const productSchema = new mongoose.Schema(
     seoDescription: String,
     tags: { type: [String], default: [] },
     variants: {
-      type: [Object],
+      type: [
+        {
+          attributeId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Attribute",
+            required: true,
+          },
+          valueId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "AttributeValue",
+            required: true,
+          },
+          stock: {
+            type: Number,
+            required: true,
+            default: 0,
+          },
+          price: {
+            type: Number,
+            required: true,
+          },
+          oldPrice: {
+            type: Number,
+            required: false,
+            default: 0,
+          },
+          sku: {
+            type: String,
+            required: true,
+            unique: true,
+          },
+        },
+      ],
       default: [],
     },
+
     isActive: {
       type: Boolean,
       default: true, // Trạng thái hiển thị
